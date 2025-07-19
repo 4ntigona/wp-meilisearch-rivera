@@ -1,0 +1,26 @@
+# Arquivos de dependência do Composer
+# Esta pasta é recriada com 'composer install', então não precisa ser versionada.
+/vendor/
+
+# Arquivos de dependência do Node.js (caso use no futuro para build de JS/CSS)
+/node_modules/
+
+# Arquivos de sistema operacional
+# ---------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Arquivos de log e de build
+# ---------------------------------
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Arquivos de configuração de Editores e IDEs
+# ---------------------------------
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

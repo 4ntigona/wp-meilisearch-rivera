@@ -1,0 +1,12 @@
+{
+    "name": "rivera/wp-meili-search",
+    "description": "Plugin customizado para integrar WooCommerce com Meilisearch.",
+    "require": {
+        "meilisearch/meilisearch-php": "^1.6"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}
