@@ -24,6 +24,9 @@ class Meili_Synchronizer {
     public function sync_on_save($post_id) {
         if (!$this->client || wp_is_post_revision($post_id) || wp_is_post_autosave($post_id)) return;
         
+        // Define a constante se não estiver definida para evitar erros.
+        if (!defined('MEILI_INDEX_NAME')) define('MEILI_INDEX_NAME', 'produtos');
+
         $document = $this->indexer->build_product_document($post_id);
         if ($document) {
             $this->client->index(MEILI_INDEX_NAME)->addDocuments([$document], 'id');
@@ -36,6 +39,9 @@ class Meili_Synchronizer {
     public function delete_from_index($post_id) {
         if (!$this->client || get_post_type($post_id) !== 'product') return;
         
+        // Define a constante se não estiver definida para evitar erros.
+        if (!defined('MEILI_INDEX_NAME')) define('MEILI_INDEX_NAME', 'produtos');
+
         $this->client->index(MEILI_INDEX_NAME)->deleteDocument($post_id);
     }
 }

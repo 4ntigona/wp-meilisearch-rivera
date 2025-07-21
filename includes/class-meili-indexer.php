@@ -8,6 +8,7 @@ if (!defined('ABSPATH')) exit;
 class Meili_Indexer {
 
     private $client;
+    const BATCH_SIZE = 50; // Smaller batch size for AJAX
 
     public function __construct() {
         $this->client = Meili_Client::instance()->get_client();
@@ -15,27 +16,32 @@ class Meili_Indexer {
 
     /**
      * Constrói o documento de um produto para ser indexado.
+     * @param int $post_id O ID do produto.
+     * @return array|null O documento ou nulo em caso de erro.
      */
     public function build_product_document($post_id) {
         $product = wc_get_product($post_id);
         if (!$product || $product->get_status() !== 'publish') return null;
 
         $document = [
-            'id'           => $post_id,
-            'post_title'   => get_the_title($post_id),
-            'content'      => strip_tags($product->get_short_description() ?: $product->get_description()),
-            'permalink'    => get_permalink($post_id),
-            'price'        => (float) $product->get_price(),
-            'stock_status' => $product->get_stock_status(),
-            'image'        => get_the_post_thumbnail_url($post_id, 'medium') ?: 'https://placehold.co/300x300?text=Sem+Imagem',
-            'categories'   => wp_get_post_terms($post_id, 'product_cat', ['fields' => 'names']),
-            'tags'         => wp_get_post_terms($post_id, 'product_tag', ['fields' => 'names']),
+            'id'             => $post_id,
+            'post_title'     => get_the_title($post_id),
+            'permalink'      => get_permalink($post_id),
+            'image'          => get_the_post_thumbnail_url($post_id, 'medium') ?: 'https://placehold.co/300x300?text=Sem+Imagem',
+            
+            // Novos campos de preço para a lógica de exibição
+            'price'          => (float) $product->get_price(),
+            'regular_price'  => (float) $product->get_regular_price(),
+            'sale_price'     => $product->get_sale_price() ? (float) $product->get_sale_price() : null,
+            'on_sale'        => $product->is_on_sale(),
         ];
 
+        // Adiciona todos os atributos do produto ao documento.
         foreach ($product->get_attributes() as $attribute) {
             $document[$attribute->get_name()] = $product->get_attribute($attribute->get_name());
         }
 
+        // Adiciona dinamicamente os campos ACF selecionados pelo admin.
         $selected_acf_fields = get_option(MEILI_ACF_OPTION_NAME, []);
         if (!empty($selected_acf_fields) && function_exists('get_field')) {
             foreach ($selected_acf_fields as $field_name) {
@@ -49,29 +55,42 @@ class Meili_Indexer {
     }
 
     /**
-     * Realiza a indexação em massa de todos os produtos.
+     * Processa um único lote de produtos para indexação via AJAX.
+     * @param int $paged O número da página/lote a ser processado.
+     * @return int O número de produtos processados neste lote.
      */
-    public function bulk_index_products() {
+    public function process_indexing_batch($paged = 1) {
         if (!$this->client) return 0;
         
-        $batch_size = 100; $page = 1; $processed_count = 0;
-        $args = ['post_type' => 'product', 'posts_per_page' => $batch_size, 'paged' => $page, 'post_status' => 'publish'];
+        if (!defined('MEILI_INDEX_NAME')) define('MEILI_INDEX_NAME', 'produtos');
+        
+        $args = [
+            'post_type'      => 'product',
+            'posts_per_page' => self::BATCH_SIZE,
+            'paged'          => $paged,
+            'post_status'    => 'publish',
+        ];
+
         $query = new WP_Query($args);
 
-        while ($query->have_posts()) {
-            $documents = [];
-            foreach ($query->posts as $post) {
-                $document = $this->build_product_document($post->ID);
-                if ($document) $documents[] = $document;
-            }
-            if (!empty($documents)) {
-                $this->client->index(MEILI_INDEX_NAME)->addDocuments($documents, 'id');
-                $processed_count += count($documents);
-            }
-            $page++;
-            $query->query($args);
+        if (!$query->have_posts()) {
+            return 0; // Nenhum produto encontrado neste lote.
         }
+        
+        $documents = [];
+        foreach ($query->posts as $post) {
+            $document = $this->build_product_document($post->ID);
+            if ($document) {
+                $documents[] = $document;
+            }
+        }
+
+        if (!empty($documents)) {
+            $this->client->index(MEILI_INDEX_NAME)->addDocuments($documents, 'id');
+            return count($documents);
+        }
+        
         wp_reset_postdata();
-        return $processed_count;
+        return 0;
     }
 }
