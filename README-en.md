@@ -1,3 +1,5 @@
+[Português](README.md)
+
 # Meilisearch Search for WooCommerce (Custom Plugin)
 
 This is a custom WordPress plugin that integrates a WooCommerce store with a self-hosted instance of [Meilisearch](https://www.meilisearch.com/), an extremely fast and relevant open-source search engine.
