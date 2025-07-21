@@ -27,7 +27,7 @@ O plugin substitui a busca padrão do WordPress/WooCommerce por uma experiência
 1.  **Clone o Repositório:**
     Clone este repositório para o seu diretório `wp-content/plugins/`.
     ```bash
-    git clone [URL_DO_SEU_REPOSITORIO] wp-content/plugins/wp-meilisearch-rivera
+    git clone https://github.com/4ntigona/wp-meilisearch-rivera wp-content/plugins/wp-meilisearch-rivera
     ```
 
 2.  **Instale as Dependências:**
@@ -51,7 +51,7 @@ Para que o plugin funcione, é necessário configurar as credenciais de acesso a
     /**
      * Configurações do Meilisearch
      */
-    define('MEILI_HOST', '[https://search.seu-dominio.com.br](https://search.seu-dominio.com.br)'); // A URL pública do seu servidor Meilisearch
+    define('MEILI_HOST', 'http://127.0.0.1:7700'); // A URL pública do seu servidor Meilisearch, padrão 127.0.0.1:7700
     define('MEILI_MASTER_KEY', 'SUA_CHAVE_MESTRA_ULTRA_SECRETA_AQUI'); // A Master Key da sua instância
     define('MEILI_INDEX_NAME', 'produtos'); // O nome do índice que será criado/utilizado
     ```
@@ -72,7 +72,7 @@ Após estes passos, seu sistema estará configurado. A sincronização automáti
 
 Este plugin foca na lógica de backend (indexação e sincronização). A implementação da interface de busca no frontend deve ser feita no seu tema.
 
-A abordagem recomendada é criar um endpoint na API REST do WordPress que atue como um proxy seguro para o Meilisearch, evitando a exposição de chaves de API no lado do cliente. O tema `avfarma-child` que acompanha o projeto contém um exemplo de como fazer isso:
+A abordagem recomendada é criar um endpoint na API REST do WordPress que atue como um proxy seguro para o Meilisearch, evitando a exposição de chaves de API no lado do cliente.
 
 * **Backend (Proxy):** O arquivo `functions.php` do tema cria um endpoint (`/wp-json/meili/v1/search`) que recebe a query de busca, a encaminha para o Meilisearch com a chave segura e devolve os resultados.
 * **Frontend (JavaScript):** O arquivo `js/meili-search.js` contém a lógica para capturar a digitação do usuário, enviar uma requisição AJAX para o endpoint do WordPress e renderizar os resultados recebidos de forma dinâmica.

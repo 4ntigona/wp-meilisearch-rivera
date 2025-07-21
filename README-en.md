@@ -27,7 +27,7 @@ The plugin replaces the default WordPress/WooCommerce search with a powerful ins
 1.  **Clone the Repository:**
     Clone this repository into your `wp-content/plugins/` directory.
     ```bash
-    git clone [YOUR_REPOSITORY_URL] wp-content/plugins/wp-meilisearch-rivera
+    git clone https://github.com/4ntigona/wp-meilisearch-rivera wp-content/plugins/wp-meilisearch-rivera
     ```
 
 2.  **Install Dependencies:**
@@ -51,7 +51,7 @@ For the plugin to work, you need to configure the access credentials for your Me
     /**
      * Meilisearch Settings
      */
-    define('MEILI_HOST', '[https://search.your-domain.com](https://search.your-domain.com)'); // The public URL of your Meilisearch server
+    define('MEILI_HOST', 'http://127.0.0.1:7700'); // The public URL of your Meilisearch server (default to 127.0.0.1:7700)
     define('MEILI_MASTER_KEY', 'YOUR_ULTRA_SECRET_MASTER_KEY_HERE'); // The Master Key of your instance
     define('MEILI_INDEX_NAME', 'products'); // The name of the index to be created/used
     ```
@@ -72,7 +72,7 @@ After these steps, your system will be configured. The automatic synchronization
 
 This plugin focuses on the backend logic (indexing and synchronization). The implementation of the search interface on the frontend should be done in your theme.
 
-The recommended approach is to create a WordPress REST API endpoint that acts as a secure proxy to Meilisearch, preventing the exposure of API keys on the client side. The accompanying `avfarma-child` theme provides an example of how to do this:
+The recommended approach is to create a WordPress REST API endpoint that acts as a secure proxy to Meilisearch, preventing the exposure of API keys on the client side.
 
 * **Backend (Proxy):** The theme's `functions.php` file creates an endpoint (`/wp-json/meili/v1/search`) that receives the search query, forwards it to Meilisearch with the secure key, and returns the results.
 * **Frontend (JavaScript):** The `js/meili-search.js` file contains the logic to capture user input, send an AJAX request to the WordPress endpoint, and dynamically render the received results.
