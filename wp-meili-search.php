@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Busca Meilisearch AVFARMA
+ * Plugin Name:       Busca Meilisearch
  * Description:       Integra a busca do WordPress e WooCommerce com um servidor Meilisearch auto-hospedado.
  * Version:           0.0.12
  * Author:            RIVERA
