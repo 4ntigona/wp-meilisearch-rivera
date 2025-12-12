@@ -1,0 +1,42 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "pj/meili-products",
+    "version": "1.0.0",
+    "title": "MeiliSearch Products",
+    "category": "widgets",
+    "icon": "search",
+    "description": "Exibe produtos do MeiliSearch com renderização client-side.",
+    "supports": {
+        "html": false
+    },
+    "textdomain": "default",
+    "editorScript": "file:./index.js",
+    "viewScript": "file:./view.js",
+    "attributes": {
+        "limit": {
+            "type": "number",
+            "default": 10
+        },
+        "categories": {
+            "type": "array",
+            "default": []
+        },
+        "authors": {
+            "type": "array",
+            "default": []
+        },
+        "tags": {
+            "type": "array",
+            "default": []
+        },
+        "sortStr": {
+            "type": "string",
+            "default": ""
+        },
+        "columns": {
+            "type": "number",
+            "default": 4
+        }
+    }
+}

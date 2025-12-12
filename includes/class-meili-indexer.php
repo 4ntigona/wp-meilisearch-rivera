@@ -39,6 +39,7 @@ class Meili_Indexer
             'regular_price' => (float) $product->get_regular_price(),
             'sale_price' => $product->get_sale_price() ? (float) $product->get_sale_price() : null,
             'on_sale' => $product->is_on_sale(),
+            'post_date_timestamp' => $product->get_date_created() ? $product->get_date_created()->getTimestamp() : 0,
         ];
 
         // Adiciona todos os atributos do produto ao documento.
@@ -47,21 +48,30 @@ class Meili_Indexer
         }
 
         // --- PATCH PEDRO & JOÃO ---
-        // Garante indexação de taxonomias personalizadas que podem não estar nos attrs padrão
+        // Garante indexação de taxonomias personalizadas
         $custom_taxonomies = [
             'pa_autoria-livro',
             'pa_organizacao-livro',
-            'product_cat'
+            'product_cat',
+            'product_tag',
+            'pa_formato'
         ];
 
         foreach ($custom_taxonomies as $tax) {
-            // Se já não estiver setado ou estiver vazio, forçamos a busca
-            if (empty($document[$tax])) {
-                $terms = wc_get_product_terms($post_id, $tax, ['fields' => 'names']);
-                if (!is_wp_error($terms) && !empty($terms)) {
-                    // Mapeia para array de strings
-                    $document[$tax] = array_map('strval', $terms);
-                }
+            $terms = wc_get_product_terms($post_id, $tax); // Remove fields=>names to get objects
+            if (!is_wp_error($terms) && !empty($terms)) {
+                // Field for Faceting (Strings)
+                $document[$tax] = wp_list_pluck($terms, 'name');
+
+                // Field for Display (Rich Data) - New field to avoid breaking facets
+                $document[$tax . '_rich'] = array_map(function ($term) {
+                    return [
+                        'id' => $term->term_id,
+                        'name' => $term->name,
+                        'slug' => $term->slug,
+                        'link' => get_term_link($term)
+                    ];
+                }, $terms);
             }
         }
         // --- FIM PATCH ---

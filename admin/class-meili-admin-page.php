@@ -67,14 +67,16 @@ class Meili_Admin_Page
                 <div class="notice notice-error" style="margin-top: 20px;">
                     <p><strong>Erro de Conexão:</strong> Não foi possível conectar ao Meilisearch. Verifique as constantes
                         <code>MEILI_HOST</code> e <code>MEILI_MASTER_KEY</code> em seu arquivo <code>wp-config.php</code> e
-                        certifique-se de que o servidor Meilisearch está rodando.</p>
+                        certifique-se de que o servidor Meilisearch está rodando.
+                    </p>
                 </div>
                 <?php return; ?>
             <?php else: ?>
                 <div class="notice notice-success is-dismissible">
                     <p>Conectado com sucesso ao Meilisearch no Host:
                         <strong><?php echo esc_html(defined('MEILI_HOST') ? MEILI_HOST : ''); ?></strong> | Índice:
-                        <strong><?php echo esc_html(defined('MEILI_INDEX_NAME') ? MEILI_INDEX_NAME : ''); ?></strong></p>
+                        <strong><?php echo esc_html(defined('MEILI_INDEX_NAME') ? MEILI_INDEX_NAME : ''); ?></strong>
+                    </p>
                 </div>
             <?php endif; ?>
 
@@ -186,14 +188,15 @@ class Meili_Admin_Page
                 $searchable_attrs = array_unique(array_merge($base_attrs, $selected_wc_attr, $selected_acf));
 
                 $index->updateSearchableAttributes($searchable_attrs);
-                $index->updateSortableAttributes(['price', 'post_title']);
+                $index->updateSortableAttributes(['price', 'post_title', 'post_date_timestamp']);
                 $index->updateFilterableAttributes([
                     'pa_autoria-livro',
                     'pa_organizacao-livro',
                     'product_cat',
                     'pa_ano-de-lancamento',
                     'pa_formato',
-                    'price'
+                    'price',
+                    'product_tag'
                 ]);
                 $message = 'Configurações do índice salvas com sucesso!';
             } else {
