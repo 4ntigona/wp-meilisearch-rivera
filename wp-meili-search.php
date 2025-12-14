@@ -102,7 +102,7 @@ final class Wp_Meili_Search_Plugin
 
         // Pega options
         $host = defined('MEILI_HOST') ? MEILI_HOST : 'http://127.0.0.1:7700'; // Default local
-        $key = defined('MEILI_MASTER_KEY') ? MEILI_MASTER_KEY : '';
+        $key = defined('MEILI_PUBLIC_KEY') ? MEILI_PUBLIC_KEY : '';
         $index = defined('MEILI_INDEX_NAME') ? MEILI_INDEX_NAME : 'pej_livros';
 
         $data = [
