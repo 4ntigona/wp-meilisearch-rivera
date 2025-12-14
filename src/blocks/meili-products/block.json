@@ -37,6 +37,14 @@
         "columns": {
             "type": "number",
             "default": 4
+        },
+        "organizations": {
+            "type": "array",
+            "default": []
+        },
+        "formats": {
+            "type": "array",
+            "default": []
         }
     }
 }

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "pj/meili-pagination",
+  "version": "1.0.0",
+  "title": "Paginação MeiliSearch",
+  "category": "widgets",
+  "icon": "buddicons-replies",
+  "description": "Controle de paginação (Clássica ou Infinita).",
+  "supports": {
+    "html": false
+  },
+  "textdomain": "default",
+  "editorScript": "file:./index.js",
+  "viewScript": "file:./view.js",
+  "attributes": {
+    "type": {
+      "type": "string",
+      "default": "classic",
+      "enum": [
+        "classic",
+        "infinite"
+      ]
+    }
+  }
+}

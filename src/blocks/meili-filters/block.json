@@ -1,0 +1,38 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "pj/meili-filters",
+    "version": "1.0.0",
+    "title": "Filtros MeiliSearch",
+    "category": "widgets",
+    "icon": "filter",
+    "description": "Filtros de facetas para a busca (Preço, Categorias, Autores, etc).",
+    "supports": {
+        "html": false
+    },
+    "textdomain": "default",
+    "editorScript": "file:./index.js",
+    "viewScript": "file:./view.js",
+    "attributes": {
+        "showPrice": {
+            "type": "boolean",
+            "default": true
+        },
+        "showFormat": {
+            "type": "boolean",
+            "default": true
+        },
+        "showCategory": {
+            "type": "boolean",
+            "default": true
+        },
+        "showAuthor": {
+            "type": "boolean",
+            "default": true
+        },
+        "showOrg": {
+            "type": "boolean",
+            "default": true
+        }
+    }
+}

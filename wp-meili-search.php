@@ -85,6 +85,8 @@ final class Wp_Meili_Search_Plugin
     public function register_blocks()
     {
         register_block_type(__DIR__ . '/build/blocks/meili-products');
+        register_block_type(__DIR__ . '/build/blocks/meili-filters');
+        register_block_type(__DIR__ . '/build/blocks/meili-pagination');
 
         $script_handle = 'pj-meili-products-view-script'; // WordPress gera handles baseado no block.json viewScript. Se 'view' for o nome, o handle é 'pj-meili-products-view-script'? 
         // Na verdade, wp-scripts gera handles. Precisamos checar se o handle automatico pega. 
