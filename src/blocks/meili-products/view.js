@@ -94,12 +94,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const search = await index.search('', searchParams);
 
                 // Debugging Facet Count
-                if (search.facetDistribution) {
-                    console.log('MeiliSearch Facets Received:', search.facetDistribution);
-                    Object.keys(search.facetDistribution).forEach(key => {
-                        console.log(`Facet [${key}] count:`, Object.keys(search.facetDistribution[key]).length);
-                    });
-                }
+                // Debugging Facet Count (Removed for Production)
+                // if (search.facetDistribution) {
+                //     console.log('MeiliSearch Facets Received:', search.facetDistribution);
+                //     Object.keys(search.facetDistribution).forEach(key => {
+                //         console.log(`Facet [${key}] count:`, Object.keys(search.facetDistribution[key]).length);
+                //     });
+                // }
 
                 broadcastStats(search, false); // Loading End & Stats
 
