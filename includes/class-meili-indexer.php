@@ -29,7 +29,8 @@ class Meili_Indexer
             return null;
 
         $title = get_the_title($post_id);
-        $formatted_title = wordwrap($title, 14, "\n");
+        // Wordwrap at 14 chars, break with \n, and DO NOT cut words (false)
+        $formatted_title = wordwrap($title, 14, "\n", false);
         $document = [
             'id' => $post_id,
             'post_title' => $title,
