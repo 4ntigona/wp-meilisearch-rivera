@@ -29,11 +29,12 @@ class Meili_Indexer
             return null;
 
         $title = get_the_title($post_id);
+        $formatted_title = wordwrap($title, 14, "\n");
         $document = [
             'id' => $post_id,
             'post_title' => $title,
             'permalink' => get_permalink($post_id),
-            'image' => get_the_post_thumbnail_url($post_id, 'large') ?: 'https://placehold.co/300x400/white/1559ed?text=' . urlencode($title),
+            'image' => get_the_post_thumbnail_url($post_id, 'large') ?: 'https://placehold.co/300x400/white/1559ed?text=' . urlencode($formatted_title),
 
             // Novos campos de preço para a lógica de exibição
             'price' => (float) $product->get_price(),
